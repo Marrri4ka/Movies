@@ -43,17 +43,29 @@ class Movies extends Component {
       handleGenreSelect = genre => {
           this.setState({selectedGenre: genre, currentPage:1});
       };
+
+      handleSort = sortColumn => {
+        this.setState({ sortColumn });
+      };
+
+      getPageData = () => {
+        const {pageSize, currentPage,movies: allMovies,selectedGenre,sortColumn} = this.state;
+        const filtered = selectedGenre && selectedGenre._id
+        ? allMovies.filter (m=> m.genre._id===selectedGenre._id) 
+        : allMovies;
+
+       const sorted=  _.orderBy(filtered,[sortColumn.path],[sortColumn.order]);
+       const movies =paginate(sorted,currentPage,pageSize);
+       return {totalCount: filtered.length, data: movies};
+      };
     
      render() { 
         const { length: count }= this.state.movies;
-        const {pageSize, currentPage,movies: allMovies,selectedGenre,sortColumn} = this.state;
+        const {pageSize, currentPage,sortColumn} = this.state;
         if (count ===0) return <p>There are no movies in database!</p>
-        const filtered = selectedGenre && selectedGenre._id
-         ? allMovies.filter (m=> m.genre._id===selectedGenre._id) 
-         : allMovies;
 
-        const sorted=  _.orderBy(filtered,[sortColumn.path],[sortColumn.order]);
-        const movies =paginate(sorted,currentPage,pageSize);
+        const {totalCount, data: movies} = this.getPageData();
+  
         return (
             <div className='row'>
                 <div className="col-3">
@@ -61,14 +73,15 @@ class Movies extends Component {
                     selectedItem={this.state.selectedGenre}
                     items={this.state.genres}
                      onItemSelect= {this.handleGenreSelect}/></div>
-                <div className="col"><p>Showimg {filtered.length} movies in database</p>
+                <div className="col"><p>Showimg {totalCount} movies in database</p>
        <MoviesTable
         movies={movies}
+        sortColumn={sortColumn} // Here!!
          onLike={this.handleLike} 
          onDelete={this.handleDelete}
          onSort = {this.handleSort}/>
         <Pagination 
-        itemsCount = {filtered.length}
+        itemsCount = {totalCount}
          pageSize = {pageSize} 
          onPageChange = {this.handlePageChange}
          currentPage = {currentPage}/></div>
