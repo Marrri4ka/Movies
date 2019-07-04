@@ -23,6 +23,5 @@ class TableHeader extends Component {
         </thead>  );
     }
 }
-}
  
 export default TableHeader;
