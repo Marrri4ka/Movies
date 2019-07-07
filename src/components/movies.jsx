@@ -5,6 +5,7 @@ import {getGenres} from '../services/fakeGenreService';
 import {paginate} from '../utils/paginate';
 import ListGroup from './common/listGroup';
 import MoviesTable from './moviesTable';
+import {Link} from 'react-router-dom';
 import _ from 'lodash';
 class Movies extends Component {
     state = {
@@ -74,6 +75,7 @@ class Movies extends Component {
                     items={this.state.genres}
                      onItemSelect= {this.handleGenreSelect}/></div>
                 <div className="col"><p>Showimg {totalCount} movies in database</p>
+                <Link to='/movies/new' className="btn-primary" style={{marginBottom:20}}>New Movie</Link>
        <MoviesTable
         movies={movies}
         sortColumn={sortColumn} // Here!!
