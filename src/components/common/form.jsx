@@ -9,6 +9,7 @@ class Form extends Component {
         data:{},
         errors: {}
       };
+      
 
 
       validate=()=>{
@@ -70,6 +71,7 @@ class Form extends Component {
                 onChange={this.handleChange}
                 error={errors[name]}
                 />
+                
             );
         }
 
